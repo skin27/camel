@@ -43,25 +43,37 @@ from("direct:a")
             .to("direct:d");
 ----
 
-XML::
+YAML::
 +
-[source,xml]
+[source,yaml]
 ----
-<route>
-    <from uri="direct:a"/>
-    <choice>
-        <when>
-            <simple>${header.foo} == 'bar'</simple>
-            <to uri="direct:b"/>
-        </when>
-        <when>
-            <simple>${header.foo} == 'cheese'</simple>
-            <to uri="direct:c"/>
-        </when>
-        <otherwise>
-            <to uri="direct:d"/>
-        </otherwise>
-    </choice>
-</route>
+- route:
+    from:
+      uri: direct
+      parameters:
+        name: a
+      steps:
+        - choice:
+            when:
+              - simple:
+                  expression: ${header.foo} == 'bar'
+                steps:
+                  - to:
+                      uri: direct
+                      parameters:
+                        name: b
+              - simple:
+                  expression: ${header.foo} == 'cheese'
+                steps:
+                  - to:
+                      uri: direct
+                      parameters:
+                        name: c
+            otherwise:
+              steps:
+                - to:
+                    uri: direct
+                    parameters:
+                      name: d
 ----
 ====
